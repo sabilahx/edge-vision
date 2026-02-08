@@ -1,30 +1,31 @@
 # edge-vision
-Wafer Defect Detection — Edge AI (Edge Vision)
+# Wafer Defect Detection — Edge AI (Edge Vision)
 
-This repository contains the training, evaluation, and deployment pipeline for a lightweight CNN-based semiconductor wafer defect detection system optimized for edge inference and Phase-1 hackathon submission.
+Lightweight CNN pipeline for semiconductor wafer defect detection, designed for edge deployment and Phase-1 hackathon submission.
 
-The workflow covers dataset loading, model training, evaluation, and conversion to ONNX format for downstream embedded deployment.
+Includes training, evaluation, and ONNX export for embedded workflows.
 
-📁 Project Structure
-.
-├── WaferMap/
-│   └── data/
-│       ├── X.npy                # Wafer images (64×64, grayscale)
-│       └── y.npy                # One-hot encoded labels (8 classes)
-├── models/
-│   └── wafer_model.h5           # Trained Keras model
-├── wafer_model.onnx             # Exported ONNX model
-├── training_script.py           # Model training script
-├── evaluation_notebook.ipynb    # Evaluation & visualization
-└── README.md
+# Project Structure
+WaferMap/
+ └── data/
+     ├── X.npy
+     └── y.npy
 
- Dataset
+models/
+ └── wafer_model.h5
 
-Format: NumPy arrays (.npy)
+wafer_model.onnx
+training_script.py
+evaluation_notebook.ipynb
+README.md
 
-Image Shape: 64 × 64 × 1 (grayscale)
+***Dataset***
 
-Number of Classes: 8
+Format: NumPy (.npy)
+
+Image size: 64×64×1 (grayscale)
+
+Classes (8):
 
 Clean
 
@@ -34,13 +35,13 @@ Other
 
 Split: Train / Validation / Test
 
- Model Architecture
+Model Architecture
 
 Framework: TensorFlow / Keras
 
-Architecture: Lightweight CNN optimized for edge devices
+Architecture: Lightweight CNN
 
-Layers
+Layers:
 
 Conv2D + BatchNorm + ReLU
 
@@ -48,85 +49,66 @@ Conv2D + BatchNorm + ReLU
 
 Global Average Pooling
 
-Dense (128 units)
+Dense (128)
 
-Output Dense (8 units, sigmoid)
+Output Dense (8, sigmoid)
 
-Loss Function: Binary Cross-Entropy
-
+Loss: Binary Cross-Entropy
 Metric: Binary Accuracy
+Model size: ~60 KB
 
-Model Size: ~60 KB
+***Training***
 
- Training
-
-Run the training script:
+Run:
 
 python training_script.py
 
-Outputs
 
-Trained model saved to:
+Output:
 
 models/wafer_model.h5
 
 Evaluation
 
-Evaluation and visual analysis are provided in:
+Open:
 
 evaluation_notebook.ipynb
 
-Includes
 
-Classification report
+Includes:
 
 Confusion matrix
 
-Accuracy, Precision, Recall, F1-score
+Accuracy, Precision, Recall, F1
 
-Binary (Clean vs Defect) performance analysis
+Clean vs Defect analysis
 
-Model Export (ONNX)
+ONNX Export
 
-The trained Keras model is converted to ONNX format for edge deployment.
+Install:
 
-Required Versions
 pip install tensorflow==2.13.0 keras==2.13.1 tf2onnx onnx
 
-Conversion Script
+
+Convert:
+
 import tensorflow as tf
 import tf2onnx
 
 model = tf.keras.models.load_model("models/wafer_model.h5", compile=False)
+tf2onnx.convert.from_keras(model, output_path="wafer_model.onnx")
 
-tf2onnx.convert.from_keras(
-    model,
-    output_path="wafer_model.onnx"
-)
-
-✅ ONNX Validation
+ONNX Validation
 import onnx
-
 onnx_model = onnx.load("wafer_model.onnx")
 onnx.checker.check_model(onnx_model)
-print("ONNX model is valid")
 
- Inference (ONNX)
+***Notes***
 
-The exported ONNX model can be deployed using:
+Edge-friendly design
 
-ONNX Runtime
+Phase-1 baseline
 
-Edge AI SDKs
+ONNX ready
 
-Embedded accelerators and SoCs
-
- Notes
-
-Designed for low-latency, edge-friendly inference
-
-Easily extendable to larger industrial wafer datasets
-
-Compatible with embedded and edge AI workflows
-
-Intended as a Phase-1 baseline for further optimization (quantization, pruning, NXP eIQ flow)
+Extendable to larger datasets
